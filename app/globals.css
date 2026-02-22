@@ -1,0 +1,33 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html,
+body {
+  @apply bg-background text-slate-100;
+}
+
+body {
+  @apply antialiased;
+}
+
+.gradient-border {
+  position: relative;
+}
+
+.gradient-border::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  background: linear-gradient(120deg, #7c3aed, #f97316, #22d3ee);
+  opacity: 0;
+  transition: opacity 150ms ease-out;
+  z-index: -1;
+}
+
+.gradient-border--active::before,
+.gradient-border:hover::before {
+  opacity: 1;
+}
+
