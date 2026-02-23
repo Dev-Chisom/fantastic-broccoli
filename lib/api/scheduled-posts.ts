@@ -10,6 +10,20 @@ export interface ScheduledPostItem {
 
 export const scheduledPostsApi = {
   list: async (): Promise<ScheduledPostItem[]> => {
-    return apiClient.get<ScheduledPostItem[]>('/scheduled-posts');
+    // Simple client-side logging to help trace scheduled posts fetches
+    // eslint-disable-next-line no-console
+    console.log('[scheduledPostsApi] Fetching scheduled posts...');
+    try {
+      const result = await apiClient.get<ScheduledPostItem[]>('/scheduled-posts');
+      // eslint-disable-next-line no-console
+      console.log('[scheduledPostsApi] Fetched scheduled posts', {
+        count: Array.isArray(result) ? result.length : 'unknown',
+      });
+      return result;
+    } catch (err) {
+      // eslint-disable-next-line no-console
+      console.error('[scheduledPostsApi] Failed to fetch scheduled posts', err);
+      throw err;
+    }
   },
 };

@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
 import { Button } from '@/components/ui/Button';
 import ProtectedRoute from '@/components/auth/ProtectedRoute';
 import AppShell from '@/components/layout/AppShell';
@@ -20,6 +21,7 @@ const PLATFORM_ICONS: Record<string, string> = {
 
 function SocialAccountsContent() {
   const { user } = useAuth();
+  const searchParams = useSearchParams();
   const [providers, setProviders] = useState<SocialProviderResponse[]>([]);
   const [accounts, setAccounts] = useState<SocialAccountResponse[]>([]);
   const [loading, setLoading] = useState(true);
@@ -47,6 +49,29 @@ function SocialAccountsContent() {
     if (!user) return;
     loadData();
   }, [user]);
+
+  useEffect(() => {
+    const errorParam = searchParams.get('error');
+    if (!errorParam) return;
+
+    let decoded = errorParam;
+    try {
+      decoded = decodeURIComponent(errorParam);
+    } catch {
+      // ignore decode errors and fall back to raw value
+    }
+
+    // Try to extract a nested "message" field if present in a JSON-like payload
+    const messageMatch = decoded.match(/"message"\s*:\s*"([^"]+)"/);
+    let message = messageMatch?.[1] ?? decoded;
+
+    if (decoded.includes('YouTube Data API v3')) {
+      message =
+        'YouTube Data API v3 is not enabled for your Google project. Enable it in Google Cloud Console (APIs & Services → Library → YouTube Data API v3) and try again.';
+    }
+
+    showError(message);
+  }, [searchParams, showError]);
 
   const handleDisconnect = async (id: string) => {
     if (!confirm('Disconnect this account?')) return;
