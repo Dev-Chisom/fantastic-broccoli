@@ -25,7 +25,7 @@ export default function ContentTypeStep() {
   return (
     <WizardLayout
       title="Choose Your Content Type"
-      description="Tell the AI what kind of faceless content you want to generate. You can always refine later."
+      description="Choose the world your stories live in (horror, anime, kids, etc.). We’ll keep pacing, hooks and visuals consistent for this genre."
     >
       <div className="grid gap-4 sm:grid-cols-2">
         {CONTENT_TYPES.map((type) => (
@@ -50,7 +50,20 @@ export default function ContentTypeStep() {
               : 'border-violet-500/40 bg-violet-500/5'
           }`}
         >
-          <h4 className="mb-4 text-sm font-medium text-slate-200">Custom topic details</h4>
+          <h4 className="mb-2 text-sm font-medium text-slate-200">Custom topic details</h4>
+          <p className="text-xs text-slate-300">
+            Describe a very specific lane for this series. Don&apos;t just say &quot;horror&quot; or
+            &quot;anime&quot;.
+          </p>
+          <div className="mt-2 space-y-1 text-xs text-slate-400">
+            <p>Examples:</p>
+            <p>&quot;Urban legends in Lagos high schools spread through social media&quot;</p>
+            <p>&quot;Anime time-loop romance set in a futuristic space academy&quot;</p>
+            <p>&quot;Motivational stories about failed startups that later succeeded&quot;</p>
+            <p className="mt-2">
+              The more specific this is, the more unique each 2-part story will feel.
+            </p>
+          </div>
           <div className="grid gap-4 sm:grid-cols-2">
             <Input
               label="Topic title"

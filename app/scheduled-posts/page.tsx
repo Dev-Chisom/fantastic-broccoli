@@ -81,28 +81,61 @@ function ScheduledPostsContent() {
               </p>
             </div>
           ) : (
-            <ul className="space-y-3">
-              {posts.map((post) => (
-                <li
-                  key={`${post.episodeId}-${post.scheduledAt}`}
-                  className="flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-white/5 bg-white/[0.02] px-4 py-3"
-                >
-                  <div>
-                    <p className="text-sm font-medium text-slate-50">
-                      {post.seriesName} · Episode {post.episodeNumber}
-                    </p>
-                    <p className="text-xs text-slate-400">
-                      Scheduled: {formatScheduledAt(post.scheduledAt)}
-                    </p>
-                  </div>
-                  <Link href={`/episodes/${post.episodeId}`}>
-                    <Button variant="ghost" size="sm">
-                      View episode
-                    </Button>
-                  </Link>
-                </li>
-              ))}
-            </ul>
+            <div className="space-y-6">
+              {(() => {
+                const grouped = posts.reduce(
+                  (acc, post) => {
+                    const key = post.seriesId;
+                    if (!acc[key]) acc[key] = { seriesName: post.seriesName, episodes: [] };
+                    acc[key].episodes.push(post);
+                    return acc;
+                  },
+                  {} as Record<string, { seriesName: string; episodes: ScheduledPostItem[] }>
+                );
+                const seriesEntries = Object.entries(grouped).map(([id, { seriesName, episodes }]) => ({
+                  seriesId: id,
+                  seriesName,
+                  episodes: [...episodes].sort(
+                    (a, b) => new Date(a.scheduledAt).getTime() - new Date(b.scheduledAt).getTime()
+                  ),
+                }));
+                seriesEntries.sort(
+                  (a, b) =>
+                    new Date(a.episodes[0]?.scheduledAt ?? 0).getTime() -
+                    new Date(b.episodes[0]?.scheduledAt ?? 0).getTime()
+                );
+                return seriesEntries.map(({ seriesId, seriesName, episodes }) => (
+                  <section key={seriesId} className="rounded-2xl border border-white/5 bg-white/[0.02] overflow-hidden">
+                    <div className="border-b border-white/5 bg-white/[0.02] px-4 py-3">
+                      <h3 className="font-semibold text-slate-50">{seriesName}</h3>
+                      <p className="text-xs text-slate-400 mt-0.5">
+                        {episodes.length} episode{episodes.length !== 1 ? 's' : ''} scheduled
+                      </p>
+                    </div>
+                    <ul className="divide-y divide-white/5">
+                      {episodes.map((post) => (
+                        <li key={`${post.episodeId}-${post.scheduledAt}`}>
+                          <Link
+                            href={`/episodes/${post.episodeId}`}
+                            className="flex flex-wrap items-center justify-between gap-4 px-4 py-3 hover:bg-white/[0.02] transition-colors"
+                          >
+                            <div>
+                              <p className="text-sm font-medium text-slate-50">
+                                Episode {post.episodeNumber}
+                              </p>
+                              <p className="text-xs text-slate-400">
+                                Scheduled: {formatScheduledAt(post.scheduledAt)}
+                              </p>
+                            </div>
+                            <span className="text-xs text-slate-400">View episode →</span>
+                          </Link>
+                        </li>
+                      ))}
+                    </ul>
+                  </section>
+                ));
+              })()}
+            </div>
           )}
         </div>
     </AppShell>

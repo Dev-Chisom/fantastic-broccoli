@@ -218,23 +218,23 @@ function EpisodeDetailContent() {
               </Card>
             )}
 
-            {(episode.views !== undefined || episode.engagement !== undefined) && (
+            {(episode.views != null || episode.engagement != null) && (
               <Card className="p-6">
                 <h2 className="mb-4 font-semibold text-slate-50">Analytics</h2>
                 <dl className="space-y-3 text-sm">
-                  {episode.views !== undefined && (
+                  {episode.views != null && (
                     <div>
                       <dt className="text-slate-400">Views</dt>
                       <dd className="mt-1 text-xl font-semibold text-slate-200">
-                        {episode.views.toLocaleString()}
+                        {(episode.views ?? 0).toLocaleString()}
                       </dd>
                     </div>
                   )}
-                  {episode.engagement !== undefined && (
+                  {episode.engagement != null && (
                     <div>
                       <dt className="text-slate-400">Engagement</dt>
                       <dd className="mt-1 text-xl font-semibold text-slate-200">
-                        {episode.engagement.toLocaleString()}
+                        {(episode.engagement ?? 0).toLocaleString()}
                       </dd>
                     </div>
                   )}

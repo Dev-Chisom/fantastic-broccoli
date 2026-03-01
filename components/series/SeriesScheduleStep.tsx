@@ -110,13 +110,11 @@ export default function SeriesScheduleStep() {
       for (let step = 2; step <= 9; step++) {
         const payload = stepPayloads[step];
         if (payload && Object.keys(payload).length > 0) {
-          console.warn(`[Series Wizard] PATCH step ${step} (${STEP_LABELS[step]}):`, payload);
           try {
             await seriesApi.updateStep(created.id, step, payload);
           } catch (stepErr) {
             const stepLabel = STEP_LABELS[step] ?? `Step ${step}`;
             const detail = stepErr instanceof Error ? stepErr.message : 'Request failed';
-            console.error(`[Series Wizard] Step ${step} (${stepLabel}) failed:`, stepErr);
             setLaunchError(`${stepLabel}: ${detail}`);
             toast.error(`${stepLabel}: ${detail}`);
             return;
@@ -202,6 +200,12 @@ export default function SeriesScheduleStep() {
         <p className="text-xs text-slate-500">
           (Your local time). Videos will be generated 6 hours before scheduled publish time so you
           can review them.
+        </p>
+        <p className="text-xs text-slate-500">
+          Episodes are generated in 2-part stories: (Ep1+Ep2), (Ep3+Ep4), etc. Part 1 sets up the
+          story and ends on a cliffhanger. Part 2 continues directly from Part 1 and resolves or
+          escalates it. To get one 2-part story per day, schedule or publish two consecutive
+          episodes per day for a series.
         </p>
 
         <div className="rounded-xl border border-white/5 bg-white/[0.02] p-4">

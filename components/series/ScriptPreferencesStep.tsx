@@ -33,11 +33,14 @@ export default function ScriptPreferencesStep() {
   return (
     <WizardLayout
       title="Script Preferences"
-      description="Control story length, tone, and how strong the opening hook is."
+      description="Set how each part of your 2-part stories should feel — length, tone, hook strength and call-to-action."
     >
       <div className="space-y-6">
         <div>
           <p className="mb-3 text-xs font-medium text-slate-400">Story length</p>
+          <p className="mb-2 text-xs text-slate-500">
+            Length is per PART. A 2-part story will be roughly 2× this length in total.
+          </p>
           <div className="flex flex-wrap gap-2">
             {LENGTH_OPTIONS.map((opt) => (
               <Card
@@ -52,7 +55,7 @@ export default function ScriptPreferencesStep() {
           </div>
         </div>
 
-        <div>
+        <div className="space-y-3">
           <p className="mb-3 text-xs font-medium text-slate-400">Tone</p>
           <div className="flex flex-wrap gap-2">
             {TONE_OPTIONS.map((opt) => (
@@ -66,9 +69,13 @@ export default function ScriptPreferencesStep() {
               </Card>
             ))}
           </div>
+          <p className="text-xs text-slate-500">
+            Tone and hook strength apply to every part in this series. Pick what you want viewers to
+            feel every time.
+          </p>
         </div>
 
-        <div>
+        <div className="space-y-3">
           <p className="mb-3 text-xs font-medium text-slate-400">Hook strength</p>
           <div className="flex flex-wrap gap-2">
             {HOOK_OPTIONS.map((opt) => (
@@ -86,19 +93,24 @@ export default function ScriptPreferencesStep() {
 
         <Toggle
           label="Include CTA?"
-          description="Add a call-to-action at the end of each video"
+          description="Turn on a call-to-action you can reuse across all parts in this series."
           checked={state.includeCta}
           onCheckedChange={(v) => update('includeCta', v)}
         />
 
         {state.includeCta && (
-          <Input
-            label="CTA text"
-            placeholder="e.g. Follow for more"
-            value={state.ctaText}
-            error={stepErrors.ctaText}
-            onChange={(e) => update('ctaText', e.target.value)}
-          />
+          <div className="space-y-1.5">
+            <Input
+              label="CTA text"
+              placeholder="e.g. Follow for more"
+              value={state.ctaText}
+              error={stepErrors.ctaText}
+              onChange={(e) => update('ctaText', e.target.value)}
+            />
+            <p className="text-xs text-slate-500">
+              We&apos;ll add this CTA at the end of the final part of each 2-part story.
+            </p>
+          </div>
         )}
 
         <div className="rounded-xl border border-white/5 bg-white/[0.02] p-4">

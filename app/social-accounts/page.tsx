@@ -57,11 +57,8 @@ function SocialAccountsContent() {
     let decoded = errorParam;
     try {
       decoded = decodeURIComponent(errorParam);
-    } catch {
-      // ignore decode errors and fall back to raw value
-    }
+    } catch {}
 
-    // Try to extract a nested "message" field if present in a JSON-like payload
     const messageMatch = decoded.match(/"message"\s*:\s*"([^"]+)"/);
     let message = messageMatch?.[1] ?? decoded;
 
