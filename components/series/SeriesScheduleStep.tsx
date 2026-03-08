@@ -12,12 +12,7 @@ import { useCreateSeries } from '@/contexts/CreateSeriesContext';
 import { useToast } from '@/contexts/ToastContext';
 import { seriesApi } from '@/lib/api/series';
 import type { CreateSeriesState } from '@/contexts/CreateSeriesContext';
-import type { StoryLength, Frequency } from '@/contexts/CreateSeriesContext';
-
-const DURATION_OPTIONS: { id: StoryLength; label: string }[] = [
-  { id: '30_40', label: '30–40 seconds' },
-  { id: '45_60', label: '45–60 seconds' },
-];
+import type { Frequency } from '@/contexts/CreateSeriesContext';
 
 const FREQUENCY_OPTIONS: { id: Frequency; label: string }[] = [
   { id: 'daily', label: 'Daily' },
@@ -28,7 +23,6 @@ const FREQUENCY_OPTIONS: { id: Frequency; label: string }[] = [
 function buildStepPayloads(state: CreateSeriesState): Record<number, Record<string, unknown>> {
   return {
     2: {
-      storyLength: state.storyLength,
       tone: state.tone,
       hookStrength: state.hookStrength,
       includeCta: state.includeCta,
@@ -66,7 +60,6 @@ function buildStepPayloads(state: CreateSeriesState): Record<number, Record<stri
     8: { connectedAccountIds: state.connectedAccountIds },
     9: {
       seriesName: state.seriesName,
-      videoDuration: state.videoDuration,
       frequency: state.frequency,
       publishTime: state.publishTime,
       startDate: state.startDate,
@@ -150,22 +143,6 @@ export default function SeriesScheduleStep() {
         />
 
         <div>
-          <p className="mb-3 text-xs font-medium text-slate-400">Video duration</p>
-          <div className="flex flex-wrap gap-2">
-            {DURATION_OPTIONS.map((opt) => (
-              <Card
-                key={opt.id}
-                selected={state.videoDuration === opt.id}
-                className="min-w-[140px]"
-                onClick={() => update('videoDuration', opt.id)}
-              >
-                <span className="text-sm font-medium text-slate-50">{opt.label}</span>
-              </Card>
-            ))}
-          </div>
-        </div>
-
-        <div>
           <p className="mb-3 text-xs font-medium text-slate-400">Schedule</p>
           <p className="mb-2 text-xs text-slate-500">Posting frequency</p>
           <div className="flex flex-wrap gap-2">
@@ -202,10 +179,10 @@ export default function SeriesScheduleStep() {
           can review them.
         </p>
         <p className="text-xs text-slate-500">
-          Episodes are generated in 2-part stories: (Ep1+Ep2), (Ep3+Ep4), etc. Part 1 sets up the
-          story and ends on a cliffhanger. Part 2 continues directly from Part 1 and resolves or
-          escalates it. To get one 2-part story per day, schedule or publish two consecutive
-          episodes per day for a series.
+          Episodes are generated in 2-part stories: (Ep1+Ep2), (Ep3+Ep4), etc. Each part is a
+          ~2-minute video. Part 1 sets up the story and ends on a cliffhanger. Part 2 continues
+          directly from Part 1 and resolves or escalates it. To get one 2-part story per day,
+          schedule or publish two consecutive episodes per day for a series.
         </p>
 
         <div className="rounded-xl border border-white/5 bg-white/[0.02] p-4">

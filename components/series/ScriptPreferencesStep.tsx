@@ -6,12 +6,7 @@ import Toggle from '@/components/ui/Toggle';
 import WizardLayout from '@/components/wizard/WizardLayout';
 import CreditEstimator from '@/components/credits/CreditEstimator';
 import { useCreateSeries } from '@/contexts/CreateSeriesContext';
-import type { StoryLength, Tone, HookStrength } from '@/contexts/CreateSeriesContext';
-
-const LENGTH_OPTIONS: { id: StoryLength; label: string }[] = [
-  { id: '30_40', label: '30–40 sec' },
-  { id: '45_60', label: '45–60 sec' },
-];
+import type { Tone, HookStrength } from '@/contexts/CreateSeriesContext';
 
 const TONE_OPTIONS: { id: Tone; label: string }[] = [
   { id: 'inspiring', label: 'Inspiring' },
@@ -33,25 +28,17 @@ export default function ScriptPreferencesStep() {
   return (
     <WizardLayout
       title="Script Preferences"
-      description="Set how each part of your 2-part stories should feel — length, tone, hook strength and call-to-action."
+      description="Set how each part of your ~2-minute stories should feel — tone, hook strength and call-to-action."
     >
       <div className="space-y-6">
         <div>
           <p className="mb-3 text-xs font-medium text-slate-400">Story length</p>
           <p className="mb-2 text-xs text-slate-500">
-            Length is per PART. A 2-part story will be roughly 2× this length in total.
+            Each part is generated as a ~2-minute video. Multi-part stories combine multiple
+            ~2-minute parts.
           </p>
-          <div className="flex flex-wrap gap-2">
-            {LENGTH_OPTIONS.map((opt) => (
-              <Card
-                key={opt.id}
-                selected={state.storyLength === opt.id}
-                className="flex-1 min-w-[120px]"
-                onClick={() => update('storyLength', opt.id)}
-              >
-                <span className="text-sm font-medium text-slate-50">{opt.label}</span>
-              </Card>
-            ))}
+          <div className="inline-flex rounded-full border border-white/10 bg-white/[0.03] px-3 py-1 text-xs text-slate-300">
+            ~2-minute videos per part
           </div>
         </div>
 

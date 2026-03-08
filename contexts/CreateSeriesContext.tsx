@@ -19,8 +19,6 @@ export type ContentType =
   | 'kids'
   | 'anime'
   | 'custom';
-
-export type StoryLength = '30_40' | '45_60';
 export type Tone = 'inspiring' | 'dark' | 'educational' | 'funny' | 'emotional';
 export type HookStrength = 'low' | 'medium' | 'aggressive';
 export type VoiceStyle = 'calm' | 'energetic' | 'dramatic' | 'storytelling';
@@ -66,7 +64,6 @@ export interface CustomTopic {
 export interface CreateSeriesState {
   contentType: ContentType;
   customTopic: Partial<CustomTopic>;
-  storyLength: StoryLength;
   tone: Tone;
   hookStrength: HookStrength;
   includeCta: boolean;
@@ -94,7 +91,6 @@ export interface CreateSeriesState {
   effects: Record<string, { enabled: boolean; isPremium?: boolean }>;
   connectedAccountIds: string[];
   seriesName: string;
-  videoDuration: StoryLength;
   frequency: Frequency;
   publishTime: string;
   startDate: string;
@@ -103,7 +99,6 @@ export interface CreateSeriesState {
 const defaultState: CreateSeriesState = {
   contentType: 'motivation',
   customTopic: {},
-  storyLength: '30_40',
   tone: 'inspiring',
   hookStrength: 'medium',
   includeCta: true,
@@ -143,7 +138,6 @@ const defaultState: CreateSeriesState = {
   },
   connectedAccountIds: [],
   seriesName: '',
-  videoDuration: '30_40',
   frequency: 'daily',
   publishTime: '12:00',
   startDate: '',
@@ -173,7 +167,6 @@ const CreateSeriesContext = createContext<CreateSeriesContextValue | null>(null)
 
 function estimateCredits(state: CreateSeriesState): number {
   let base = 8;
-  if (state.storyLength === '45_60') base += 4;
   if (state.artStyle === 'cinematic_ai' || state.artStyle === 'realistic') base += 2;
   const premiumEffects = Object.values(state.effects).filter(
     (e) => e.enabled && e.isPremium
