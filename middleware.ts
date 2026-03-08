@@ -5,11 +5,26 @@ const TIKTOK_VERIFICATION = 'tiktok-developers-site-verification=DGrJr1A6HfwQFTR
 
 export function middleware(request: NextRequest) {
   const path = request.nextUrl.pathname;
-  const normalized = path.replace(/\/$/, '') || '/';
-  if (normalized === '/tiktok-developers-site-verification') {
+  const isVerification =
+    path === '/tiktok-developers-site-verification' ||
+    path === '/tiktok-developers-site-verification/' ||
+    path === '/tiktok-developers-site-verification.txt';
+  if (isVerification) {
     return new NextResponse(TIKTOK_VERIFICATION, {
-      headers: { 'Content-Type': 'text/plain; charset=utf-8' },
+      status: 200,
+      headers: {
+        'Content-Type': 'text/plain; charset=utf-8',
+        'Cache-Control': 'no-store',
+      },
     });
   }
   return NextResponse.next();
 }
+
+export const config = {
+  matcher: [
+    '/tiktok-developers-site-verification',
+    '/tiktok-developers-site-verification/',
+    '/tiktok-developers-site-verification.txt',
+  ],
+};
